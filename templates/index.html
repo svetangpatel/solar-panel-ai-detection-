@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Solar Panel AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+<h1>☀️ Solar Panel Fault Detection AI</h1>
+
+<form action="/predict" method="post" enctype="multipart/form-data">
+    <input type="file" name="image" required>
+    <br><br>
+    <button type="submit">Detect Fault</button>
+</form>
+
+<!-- {% if prediction %} <div class="result"> <h2>Detected: {{ prediction }}</h2> <h3>Confidence: {{ confidence }}%</h3> <h3>{{ suggestion }}</h3> <img src="{{ img_path }}" width="300"> </div>
+{% endif %} -->
+
+{% if prediction %}
+<div class="card">
+<h2>Fault: {{ prediction }}</h2>
+<h3>Confidence: {{ confidence }}%</h3>
+<h3>Estimated Efficiency Loss: {{ loss }}%</h3>
+<h3>{{ suggestion }}</h3>
+<img src="{{ img_path }}" width="300">
+</div>
+{% endif %}
+
+</div>
+
+</body>
+</html>

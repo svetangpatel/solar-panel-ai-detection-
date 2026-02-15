@@ -1,0 +1,31 @@
+body{
+background:#f2f6fc;
+font-family:Arial;
+text-align:center;
+}
+
+.container{
+margin-top:40px;
+}
+
+h1{
+color:#2c3e50;
+}
+
+button{
+padding:12px 25px;
+background:green;
+color:white;
+border:none;
+font-size:16px;
+border-radius:8px;
+}
+
+.result{
+margin-top:20px;
+background:white;
+padding:20px;
+display:inline-block;
+border-radius:10px;
+box-shadow:0 0 10px gray;
+}
