@@ -4,6 +4,7 @@ import numpy as np
 import cv2
 import os
 from flask import send_from_directory
+import yagmail
 
 app = Flask(__name__)
 DATABASE = 'database.db'
@@ -19,6 +20,26 @@ classes = ["Bird Drop",
 
 UPLOAD_FOLDER = "uploads"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def send_email_alert(result, confidence):
+    try:
+        yag = yagmail.SMTP("youremailid@gmail.com", "abcd efgh ijkl mopq")
+
+        subject = "⚠ Solar Panel Fault Alert"
+        body = f"""
+Solar Panel Fault Detected!
+
+Fault Type: {result}
+Confidence: {round(confidence*100,2)}%
+
+Action Required: Please check panel immediately.
+        """
+
+        yag.send("youremailid@gmail.com", subject, body)
+        print("Email sent successfully")
+
+    except Exception as e:
+        print("Email error:", e)
 
 @app.route('/dashboard')
 def dashboard():
@@ -73,6 +94,15 @@ def predict():
 
         result = classes[index]
 
+        if result in ["Bird Drop",
+           "Clean Panel",
+           "Crack",
+           "Dusty Panel",
+           "Electrical Damage",
+           "Snow Covered"]:
+           send_email_alert(result, confidence)
+    
+
         if result == "Dusty Panel":
             loss_percent = 20
             suggestion = "Clean panel to improve efficiency"
@@ -103,6 +133,7 @@ def predict():
                                img_path=img_path)
 
     return render_template("index.html")
+
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
